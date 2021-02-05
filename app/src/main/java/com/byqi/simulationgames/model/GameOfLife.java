@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 public class GameOfLife extends BaseModel {
 
@@ -38,7 +37,7 @@ public class GameOfLife extends BaseModel {
     public void updateCells() {
         HashSet<Pair<Integer, Integer>> nextStateCells = new HashSet<>();
         HashMap<Pair<Integer, Integer>, Integer> numNeighbours = getNumberNeighbours();
-        for (Map.Entry<Pair<Integer, Integer>, Integer> numNeighboursEntry : numNeighbours.entrySet()) {
+        for (HashMap.Entry<Pair<Integer, Integer>, Integer> numNeighboursEntry : numNeighbours.entrySet()) {
             Pair<Integer, Integer> neighbour = numNeighboursEntry.getKey();
             int count = numNeighboursEntry.getValue();
             if (count == 2) { // The cell has 2 neighbours
@@ -54,10 +53,9 @@ public class GameOfLife extends BaseModel {
     private HashMap<Pair<Integer, Integer>, Integer> getNumberNeighbours() {
         HashMap<Pair<Integer, Integer>, Integer> neighbours = new HashMap<>();
         for (Pair<Integer, Integer> cell : cells) {
-            for (int[] offsetPair : neighbourOffsets) {
-                Pair<Integer, Integer> pair = new Pair<>(cell.first + offsetPair[0], cell.second + offsetPair[1]);
-                if (neighbours.containsKey(pair)) neighbours.put(pair, neighbours.get(pair) + 1);
-                else neighbours.put(pair, 1);
+            for (int[] offset : neighbourOffsets) {
+                Pair<Integer, Integer> pair = new Pair<>(cell.first + offset[0], cell.second + offset[1]);
+                neighbours.put(pair, neighbours.getOrDefault(pair, 0) + 1);
             }
         }
         for (int i = -1; i <= row; i++) {
