@@ -2,7 +2,12 @@ package com.byqi.simulationgames.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -10,10 +15,11 @@ import androidx.annotation.Nullable;
 import com.byqi.simulationgames.R;
 import com.byqi.simulationgames.model.GameOfLife;
 
-public class GameOfLifeView extends View {
+public class GameOfLifeView extends View implements View.OnTouchListener {
 
-    private int row, col, cellWidth, cellHeight;
-    private int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
+    private final int row, col, cellWidth, cellHeight;
+    private final int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
+    private final Paint paint;
 
     private GameOfLife game;
 
@@ -43,6 +49,49 @@ public class GameOfLifeView extends View {
         height = cellHeight * row + paddingTop + paddingBottom;
 
         game = new GameOfLife(row, col);
+
+        paint = new Paint();
+        setOnTouchListener(this);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(width, height);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        paint.setStrokeWidth(1);
+        for (Pair<Integer, Integer> cell : game.getCells()) {
+            Pair<Integer, Integer> position = cellCoordinateToPosition(cell);
+            canvas.drawRect(position.first, position.second, position.first+cellWidth-1, position.second+cellHeight-1, paint);
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        Pair<Integer, Integer> cell = positionToCellCoordinate((int) (event.getX()), (int) (event.getY()));
+        Log.d("touch",(int) (event.getX())+", "+ (int) (event.getY()));
+        if (cell.first < 0 || cell.first >= row || cell.second < 0 || cell.second >= col)
+            return true;
+        Log.d("cell",cell.first+", "+cell.second);
+        game.addCell(cell);
+        this.postInvalidate();
+        return true;
+    }
+
+    /**
+     * @param coordinate, x and y
+     * @return the top left pixel of the cell
+     */
+    private Pair<Integer, Integer> cellCoordinateToPosition(Pair<Integer, Integer> coordinate) {
+        return new Pair<>(paddingLeft + coordinate.second * cellWidth, paddingTop + coordinate.first * cellHeight);
+    }
+
+    private Pair<Integer, Integer> positionToCellCoordinate(int x, int y) {
+        return new Pair<>((y - paddingTop) / cellHeight, (x - paddingLeft) / cellWidth);
     }
 
     public void update() {

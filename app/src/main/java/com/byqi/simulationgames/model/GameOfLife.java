@@ -1,5 +1,6 @@
 package com.byqi.simulationgames.model;
 
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -30,6 +31,11 @@ public class GameOfLife {
 
     public List<Pair<Integer, Integer>> getCells() {
         return new ArrayList<>(cells);
+    }
+
+    public void addCell(Pair<Integer, Integer> cell) {
+        if (cell.first >= 0 && cell.first < row && cell.second >= 0 && cell.second < col)
+            cells.add(cell);
     }
 
     public void updateCells() {

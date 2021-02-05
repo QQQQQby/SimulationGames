@@ -25,10 +25,14 @@
     <com.byqi.simulationgames.widget.GameOfLifeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:row="20"
-        app:col="20"
-        app:cell_width="20"
-        app:cell_height="20">
+        app:row="160"
+        app:col="100"
+        app:cell_width="10"
+        app:cell_height="10"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp">
 
     </com.byqi.simulationgames.widget.GameOfLifeView>
 
