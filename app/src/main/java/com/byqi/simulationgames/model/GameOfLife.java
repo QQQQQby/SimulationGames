@@ -2,14 +2,12 @@ package com.byqi.simulationgames.model;
 
 import android.util.Pair;
 
-import com.byqi.simulationgames.base.BaseModel;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class GameOfLife extends BaseModel {
+public class GameOfLife {
 
     private int row, col;
     private HashSet<Pair<Integer, Integer>> cells;

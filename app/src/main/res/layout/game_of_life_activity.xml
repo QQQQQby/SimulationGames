@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.GameOfLifeActivity">
 
     <Toolbar
-        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
         android:background="@color/purple_500">
@@ -18,16 +17,19 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:gravity="center"
-            android:text="@string/app_name"
+            android:text="@string/game_of_life"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.byqi.simulationgames.widget.GameOfLifeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/game_list">
+        app:row="20"
+        app:col="20"
+        app:cell_width="20"
+        app:cell_height="20">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </com.byqi.simulationgames.widget.GameOfLifeView>
 
 </LinearLayout>

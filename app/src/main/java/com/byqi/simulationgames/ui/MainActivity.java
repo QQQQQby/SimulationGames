@@ -1,6 +1,7 @@
 package com.byqi.simulationgames.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,14 +18,26 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         gameNames = getResources().getStringArray(R.array.game_list_names);
 
         GameListAdapter gameListAdapter = new GameListAdapter(gameNames);
-        gameList = (RecyclerView) findViewById(R.id.game_list);
+        gameListAdapter.setOnItemClickListener((view, position) -> {
+            Intent intent;
+            switch (position) {
+                case 0:
+                    intent = new Intent(MainActivity.this, GameOfLifeActivity.class);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected position: " + position);
+            }
+            startActivity(intent);
+        });
+
+        gameList = findViewById(R.id.game_list);
         gameList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        gameList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        gameList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         gameList.setAdapter(gameListAdapter);
 
     }

@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">SimulationGames</string>
-    <string name="default_game_name">game name missing</string>
+
+    <string name="simulation_games">Simulation Games</string>
+    <string name="game_of_life">Game Of Life</string>
 
     <string-array name="game_list_names">
-        <item>Conway's Game Of Life</item>
+        <item>Conway\'s Game Of Life</item>
     </string-array>
 
 </resources>
