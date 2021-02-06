@@ -57,13 +57,24 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         startUpdate();
     }
 
-    public void setPaused(boolean paused){
-        this.paused = paused;
+    public void pause() {
+        synchronized (game) {
+            this.paused = true;
+        }
+    }
+
+    public void resume() {
+        synchronized (game) {
+            this.paused = false;
+            game.notify();
+        }
     }
 
     public void clear() {
-        game.clearCells();
-        postInvalidate();
+        synchronized (game) {
+            game.clearCells();
+            postInvalidate();
+        }
     }
 
     @Override
@@ -113,14 +124,19 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
             while (true) {
                 try {
                     Thread.sleep(100);
-                    if(paused)
-                        continue;
-                    synchronized (game) {
-                        game.updateCells();
-                        postInvalidate();
-                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                synchronized (game) {
+                    if (paused) {
+                        try {
+                            game.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    game.updateCells();
+                    postInvalidate();
                 }
             }
         }).start();

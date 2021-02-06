@@ -33,20 +33,28 @@ public class GameOfLifeActivity extends Activity {
         startButton.setOnClickListener(v -> {
             startButtonLayout.setVisibility(View.GONE);
             pauseButtonLayout.setVisibility(View.VISIBLE);
-            gameView.setPaused(false);
+            gameView.resume();
         });
         pauseButton.setOnClickListener(v -> {
             startButtonLayout.setVisibility(View.VISIBLE);
             pauseButtonLayout.setVisibility(View.GONE);
-            gameView.setPaused(true);
+            gameView.pause();
         });
         clearButton.setOnClickListener(v -> {
             startButtonLayout.setVisibility(View.VISIBLE);
             pauseButtonLayout.setVisibility(View.GONE);
-            gameView.setPaused(true);
+            gameView.pause();
             gameView.clear();
         });
 
         pauseButtonLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startButtonLayout.setVisibility(View.VISIBLE);
+        pauseButtonLayout.setVisibility(View.GONE);
+        gameView.pause();
     }
 }
