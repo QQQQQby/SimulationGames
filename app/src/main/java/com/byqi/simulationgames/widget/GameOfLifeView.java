@@ -20,8 +20,8 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
     private final int row, col, cellWidth, cellHeight;
     private final int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
     private final Paint paint;
-
-    private GameOfLife game;
+    private final GameOfLife game;
+    private boolean paused;
 
     public GameOfLifeView(Context context) {
         this(context, null, 0);
@@ -52,6 +52,18 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
 
         paint = new Paint();
         setOnTouchListener(this);
+
+        paused = true;
+        startUpdate();
+    }
+
+    public void setPaused(boolean paused){
+        this.paused = paused;
+    }
+
+    public void clear() {
+        game.clearCells();
+        postInvalidate();
     }
 
     @Override
@@ -66,19 +78,21 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         paint.setStrokeWidth(1);
         for (Pair<Integer, Integer> cell : game.getCells()) {
             Pair<Integer, Integer> position = cellCoordinateToPosition(cell);
-            canvas.drawRect(position.first, position.second, position.first+cellWidth-1, position.second+cellHeight-1, paint);
+            canvas.drawRect(position.first, position.second, position.first + cellWidth - 1, position.second + cellHeight - 1, paint);
         }
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Pair<Integer, Integer> cell = positionToCellCoordinate((int) (event.getX()), (int) (event.getY()));
-        Log.d("touch",(int) (event.getX())+", "+ (int) (event.getY()));
+        Log.d("touch", (int) (event.getX()) + ", " + (int) (event.getY()));
         if (cell.first < 0 || cell.first >= row || cell.second < 0 || cell.second >= col)
             return true;
-        Log.d("cell",cell.first+", "+cell.second);
-        game.addCell(cell);
-        this.postInvalidate();
+        Log.d("cell", cell.first + ", " + cell.second);
+        synchronized (game) {
+            game.addCell(cell);
+            postInvalidate();
+        }
         return true;
     }
 
@@ -94,10 +108,21 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         return new Pair<>((y - paddingTop) / cellHeight, (x - paddingLeft) / cellWidth);
     }
 
-    public void update() {
-        synchronized (game) {
-
-        }
+    private void startUpdate() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                    if(paused)
+                        continue;
+                    synchronized (game) {
+                        game.updateCells();
+                        postInvalidate();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
-
 }

@@ -22,18 +22,82 @@
             android:textSize="20sp" />
     </Toolbar>
 
-    <com.byqi.simulationgames.widget.GameOfLifeView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:row="160"
-        app:col="100"
-        app:cell_width="10"
-        app:cell_height="10"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:paddingBottom="10sp">
+        android:layout_height="match_parent">
 
-    </com.byqi.simulationgames.widget.GameOfLifeView>
+        <com.byqi.simulationgames.widget.GameOfLifeView
+            android:id="@+id/game_of_life_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="20sp"
+            android:paddingBottom="20sp"
+            app:cell_height="20"
+            app:cell_width="20"
+            app:col="50"
+            app:row="80">
+
+        </com.byqi.simulationgames.widget.GameOfLifeView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/game_of_life_start_btn_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/game_of_life_start_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00FFFFFF"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/play_btn" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/game_of_life_pause_btn_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/game_of_life_pause_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00FFFFFF"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/pause_btn" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/game_of_life_clear_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00FFFFFF"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/clear_btn" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

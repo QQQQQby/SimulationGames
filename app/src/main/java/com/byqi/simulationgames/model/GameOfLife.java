@@ -12,6 +12,7 @@ public class GameOfLife {
 
     private int row, col;
     private HashSet<Pair<Integer, Integer>> cells;
+
     private final int[][] neighbourOffsets = new int[][]{
             {-1, -1},
             {-1, 0},
@@ -39,19 +40,27 @@ public class GameOfLife {
     }
 
     public void updateCells() {
-        HashSet<Pair<Integer, Integer>> nextStateCells = new HashSet<>();
-        HashMap<Pair<Integer, Integer>, Integer> numNeighbours = getNumberNeighbours();
-        for (HashMap.Entry<Pair<Integer, Integer>, Integer> numNeighboursEntry : numNeighbours.entrySet()) {
-            Pair<Integer, Integer> neighbour = numNeighboursEntry.getKey();
-            int count = numNeighboursEntry.getValue();
-            if (count == 2) { // The cell has 2 neighbours
-                if (cells.contains(neighbour)) // alive
+        synchronized (cells) {
+            HashSet<Pair<Integer, Integer>> nextStateCells = new HashSet<>();
+            HashMap<Pair<Integer, Integer>, Integer> numNeighbours = getNumberNeighbours();
+            for (HashMap.Entry<Pair<Integer, Integer>, Integer> numNeighboursEntry : numNeighbours.entrySet()) {
+                Pair<Integer, Integer> neighbour = numNeighboursEntry.getKey();
+                int count = numNeighboursEntry.getValue();
+                if (count == 2) { // The cell has 2 neighbours
+                    if (cells.contains(neighbour)) // alive
+                        nextStateCells.add(neighbour);
+                } else if (count == 3) { // The cell has 3 neighbours, whether it is dead or alive
                     nextStateCells.add(neighbour);
-            } else if (count == 3) { // The cell has 3 neighbours, whether it is dead or alive
-                nextStateCells.add(neighbour);
+                }
             }
+            cells = nextStateCells;
         }
-        cells = nextStateCells;
+    }
+
+    public void clearCells() {
+        synchronized (cells) {
+            cells = new HashSet<>();
+        }
     }
 
     private HashMap<Pair<Integer, Integer>, Integer> getNumberNeighbours() {
@@ -72,4 +81,5 @@ public class GameOfLife {
         }
         return neighbours;
     }
+
 }
