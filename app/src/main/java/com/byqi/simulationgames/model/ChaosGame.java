@@ -5,34 +5,57 @@ import android.util.Pair;
 import java.util.HashSet;
 import java.util.Random;
 
-class ChaosGame {
+public class ChaosGame {
 
-    Pair<Double, Double> A, B, C, P;
+    Pair<Integer, Integer> A;
+    Pair<Integer, Integer> B;
+    Pair<Integer, Integer> C;
+    Pair<Double, Double> P;
     HashSet<Pair<Integer, Integer>> history;
     Random random;
 
-    public ChaosGame(Pair<Double, Double> A, Pair<Double, Double> B, Pair<Double, Double> C) {
+    public ChaosGame() {
+        this(null, null, null);
+    }
+
+    public ChaosGame(Pair<Integer, Integer> A, Pair<Integer, Integer> B, Pair<Integer, Integer> C) {
         this(A, B, C, null);
     }
 
-    public ChaosGame(Pair<Double, Double> A, Pair<Double, Double> B, Pair<Double, Double> C, Pair<Double, Double> P) {
+    public ChaosGame(Pair<Integer, Integer> A, Pair<Integer, Integer> B, Pair<Integer, Integer> C, Pair<Double, Double> P) {
         this.A = A;
         this.B = B;
         this.C = C;
         this.P = P;
         history = new HashSet<>();
-        Random random = new Random(System.currentTimeMillis());
+        random = new Random(System.currentTimeMillis());
     }
 
-    public Pair<Double, Double> getA() {
+    public void setA(Pair<Integer, Integer> A) {
+        this.A = A;
+    }
+
+    public void setB(Pair<Integer, Integer> B) {
+        this.B = B;
+    }
+
+    public void setC(Pair<Integer, Integer> C) {
+        this.C = C;
+    }
+
+    public void setP(Pair<Double, Double> P) {
+        this.P = P;
+    }
+
+    public Pair<Integer, Integer> getA() {
         return A;
     }
 
-    public Pair<Double, Double> getB() {
+    public Pair<Integer, Integer> getB() {
         return B;
     }
 
-    public Pair<Double, Double> getC() {
+    public Pair<Integer, Integer> getC() {
         return C;
     }
 
@@ -45,9 +68,11 @@ class ChaosGame {
     }
 
     public void updateP() {
-        history.add(new Pair<>(P.first.intValue(), P.second.intValue()));
+        if (A == null || B == null || C == null || P == null)
+            return;
+        history.add(new Pair<>((int)(Math.ceil(P.first)), (int)(Math.ceil(P.second))));
         double chance = random.nextDouble();
-        Pair<Double, Double> candidate;
+        Pair<Integer, Integer> candidate;
         if (chance < 1 / 3.0) {
             candidate = A;
         } else if (chance < 2 / 3.0) {

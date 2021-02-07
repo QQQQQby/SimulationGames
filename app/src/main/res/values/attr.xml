@@ -6,4 +6,9 @@
         <attr name="cell_width" format="integer"/>
         <attr name="cell_height" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="ChaosGameView">
+        <attr name="game_width" format="integer"/>
+        <attr name="game_height" format="integer"/>
+    </declare-styleable>
 </resources>
