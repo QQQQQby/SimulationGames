@@ -6,6 +6,7 @@
     <string name="start">start</string>
     <string name="pause">pause</string>
     <string name="clear">clear</string>
+    <string name="speed">speed: </string>
 
     <string-array name="game_list_names">
         <item>Conway\'s Game Of Life</item>

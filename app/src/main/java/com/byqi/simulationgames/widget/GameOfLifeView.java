@@ -3,6 +3,7 @@ package com.byqi.simulationgames.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,11 +18,14 @@ import com.byqi.simulationgames.model.GameOfLife;
 
 public class GameOfLifeView extends View implements View.OnTouchListener {
 
-    private final int row, col, cellWidth, cellHeight;
-    private final int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
-    private final Paint paint;
-    private final GameOfLife game;
-    private boolean paused;
+    int row, col, cellWidth, cellHeight;
+    int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
+    Integer speed;
+    boolean paused;
+    Paint paint;
+    final GameOfLife game;
+
+    final Object speedLock;
 
     public GameOfLifeView(Context context) {
         this(context, null, 0);
@@ -53,6 +57,8 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         paint = new Paint();
         setOnTouchListener(this);
 
+        speed = 1;
+        speedLock = new Object();
         paused = true;
         startUpdate();
     }
@@ -67,6 +73,12 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         synchronized (game) {
             this.paused = false;
             game.notify();
+        }
+    }
+
+    public void setSpeed(int speed) {
+        synchronized (speedLock) {
+            this.speed = speed;
         }
     }
 
@@ -87,6 +99,12 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         paint.setStrokeWidth(1);
+        paint.setColor(Color.BLACK);
+        canvas.drawLine(paddingLeft, paddingTop, paddingLeft, height - paddingBottom - 1, paint);
+        canvas.drawLine(paddingLeft, height - paddingBottom - 1, width - paddingRight - 1, height - paddingBottom - 1, paint);
+        canvas.drawLine(paddingLeft, paddingTop, width - paddingRight - 1, paddingTop, paint);
+        canvas.drawLine(width - paddingRight - 1, paddingTop, width - paddingRight - 1, height - paddingBottom - 1, paint);
+        paint.setColor(Color.BLUE);
         for (Pair<Integer, Integer> cell : game.getCells()) {
             Pair<Integer, Integer> position = cellCoordinateToPosition(cell);
             canvas.drawRect(position.first, position.second, position.first + cellWidth - 1, position.second + cellHeight - 1, paint);
@@ -122,8 +140,12 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
     private void startUpdate() {
         new Thread(() -> {
             while (true) {
+                int speed;
+                synchronized (speedLock) {
+                    speed = 20 + 1000 / this.speed;
+                }
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(speed);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

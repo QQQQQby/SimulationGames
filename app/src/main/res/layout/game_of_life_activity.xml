@@ -31,20 +31,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:paddingTop="20sp"
-            android:paddingBottom="20sp"
-            app:cell_height="20"
-            app:cell_width="20"
-            app:col="50"
-            app:row="80">
-
+            android:paddingTop="10sp"
+            android:paddingBottom="0sp"
+            app:cell_height="16"
+            app:cell_width="16"
+            app:row="90"
+            app:col="60">
         </com.byqi.simulationgames.widget.GameOfLifeView>
+
+            <RelativeLayout
+                android:id="@+id/game_of_life_seek_bar_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:paddingVertical="10sp"
+                android:layout_centerHorizontal="true">
+
+                <SeekBar
+                    android:id="@+id/game_of_life_speed_seek_bar"
+                    android:layout_width="200sp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    style="@android:style/Widget.Holo.SeekBar"
+                    android:max="8">
+                </SeekBar>
+
+                <TextView
+                    android:id="@+id/game_of_life_speed_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/game_of_life_speed_seek_bar"
+                    android:layout_centerVertical="true"
+                    android:text="@string/speed"
+                    android:textSize="16sp"/>
+            </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:paddingVertical="30dp"
+            android:layout_above="@+id/game_of_life_seek_bar_layout"
+            android:paddingVertical="20dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
