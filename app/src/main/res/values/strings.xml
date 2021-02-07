@@ -3,6 +3,8 @@
 
     <string name="simulation_games">Simulation Games</string>
     <string name="game_of_life">Game Of Life</string>
+    <string name="chaos_game">Chaos Game</string>
+
     <string name="start">start</string>
     <string name="pause">pause</string>
     <string name="clear">clear</string>
@@ -10,6 +12,7 @@
 
     <string-array name="game_list_names">
         <item>Conway\'s Game Of Life</item>
+        <item>Chaos Game</item>
     </string-array>
 
 </resources>

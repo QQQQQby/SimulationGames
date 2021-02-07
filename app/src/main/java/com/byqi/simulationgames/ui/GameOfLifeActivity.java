@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.byqi.simulationgames.R;
-import com.byqi.simulationgames.model.GameOfLife;
 import com.byqi.simulationgames.widget.GameOfLifeView;
 
 public class GameOfLifeActivity extends Activity {
@@ -21,7 +20,7 @@ public class GameOfLifeActivity extends Activity {
     ImageButton startButton, pauseButton, clearButton;
     RelativeLayout startButtonLayout, pauseButtonLayout;
     SeekBar speedSeekBar;
-    TextView speedTextView;
+    TextView title, speedTextView;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -29,6 +28,7 @@ public class GameOfLifeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_of_life_activity);
 
+        title = findViewById(R.id.game_of_life_title).findViewById(R.id.title_name);
         gameView = findViewById(R.id.game_of_life_view);
         startButton = findViewById(R.id.game_of_life_start_btn);
         pauseButton = findViewById(R.id.game_of_life_pause_btn);
@@ -37,6 +37,8 @@ public class GameOfLifeActivity extends Activity {
         pauseButtonLayout = findViewById(R.id.game_of_life_pause_btn_layout);
         speedSeekBar = findViewById(R.id.game_of_life_speed_seek_bar);
         speedTextView = findViewById(R.id.game_of_life_speed_text_view);
+
+        title.setText(getResources().getString(R.string.game_of_life));
 
         startButton.setOnClickListener(v -> {
             startButtonLayout.setVisibility(View.GONE);

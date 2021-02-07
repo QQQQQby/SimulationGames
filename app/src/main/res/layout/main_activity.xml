@@ -6,20 +6,8 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/tool_bar_height"
-        android:background="@color/purple_500">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:text="@string/simulation_games"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-    </Toolbar>
+    <include layout="@layout/title_bar"
+        android:id="@+id/main_activity_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

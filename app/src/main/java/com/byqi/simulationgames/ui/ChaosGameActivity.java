@@ -1,0 +1,22 @@
+package com.byqi.simulationgames.ui;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+
+import com.byqi.simulationgames.R;
+
+public class ChaosGameActivity extends Activity {
+
+    TextView title;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.chaos_game_activity);
+
+        title = findViewById(R.id.chaos_game_title).findViewById(R.id.title_name);
+        title.setText(getResources().getString(R.string.chaos_game));
+    }
+}
