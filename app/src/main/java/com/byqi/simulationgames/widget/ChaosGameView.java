@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -16,7 +17,7 @@ import com.byqi.simulationgames.model.ChaosGame;
 
 public class ChaosGameView extends View {
 
-    int width, height, gameViewWidth, gameViewHeight, paddingLeft, paddingRight, paddingTop, paddingBottom;
+    int width, height, gameWidth, gameHeight, paddingLeft, paddingRight, paddingTop, paddingBottom;
     final ChaosGame game;
     Paint paint;
 
@@ -32,8 +33,8 @@ public class ChaosGameView extends View {
         super(context, attrs, defStyleAttr);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ChaosGameView);
-        gameViewWidth = ta.getInteger(R.styleable.ChaosGameView_game_width, 400);
-        gameViewHeight = ta.getInteger(R.styleable.ChaosGameView_game_height, 800);
+        gameWidth = ta.getInteger(R.styleable.ChaosGameView_game_width, 400);
+        gameHeight = ta.getInteger(R.styleable.ChaosGameView_game_height, 800);
         ta.recycle();
 
         paddingLeft = getPaddingLeft();
@@ -41,31 +42,43 @@ public class ChaosGameView extends View {
         paddingTop = getPaddingTop();
         paddingBottom = getPaddingBottom();
 
-        width = gameViewWidth + paddingLeft + paddingRight;
-        height = gameViewHeight + paddingTop + paddingBottom;
+        width = gameWidth + paddingLeft + paddingRight;
+        height = gameHeight + paddingTop + paddingBottom;
 
         game = new ChaosGame();
         paint = new Paint();
 
         //Test
-        game.setA(new Pair<>(0, gameViewHeight / 2));
-        game.setB(new Pair<>(600, 0));
-        game.setC(new Pair<>(800, 1600));
-        game.setP(new Pair<>(gameViewWidth / 2.0, gameViewHeight / 2.0));
+        game.addPointToPolygon(new Pair<>(100, 100));
+        game.addPointToPolygon(new Pair<>(900, 500));
+        game.addPointToPolygon(new Pair<>(300, 1500));
+        game.setP(new Pair<>(0.0, 0.0));
         new Thread(() -> {
             while (true) {
-                try {
-                    Thread.sleep(0);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(0);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 synchronized (game) {
                     game.updateP();
+                    invalidate();
                 }
-                postInvalidate();
             }
         }).start();
 
+
+        setOnTouchListener((view, motionEvent) -> {
+//            performClick();
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                synchronized (game) {
+                    game.addPointToPolygon(new Pair<>((int) (motionEvent.getX()), (int) (motionEvent.getY())));
+                    invalidate();
+                }
+            }
+            performClick();
+            return true;
+        });
 
     }
 
@@ -73,10 +86,12 @@ public class ChaosGameView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
-            width = MeasureSpec.getSize(widthMeasureSpec) + paddingLeft + paddingRight;
+            width = MeasureSpec.getSize(widthMeasureSpec);
+            gameWidth = width - paddingLeft - paddingRight;
         }
         if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
-            height = MeasureSpec.getSize(heightMeasureSpec) + paddingTop + paddingBottom;
+            height = MeasureSpec.getSize(heightMeasureSpec);
+            gameHeight = height - paddingTop - paddingBottom;
         }
         setMeasuredDimension(width, height);
     }
@@ -87,22 +102,28 @@ public class ChaosGameView extends View {
         synchronized (game) {
             paint.setStrokeWidth(1);
             paint.setColor(Color.RED);
-            Pair<Integer, Integer> A = game.getA(), B = game.getB(), C = game.getC();
-            if (A != null)
-                canvas.drawPoint(A.first + paddingLeft, A.second + paddingTop, paint);
-            if (B != null)
-                canvas.drawPoint(B.first + paddingLeft, B.second + paddingTop, paint);
-            if (C != null)
-                canvas.drawPoint(C.first + paddingLeft, C.second + paddingTop, paint);
+            for (Pair<Integer, Integer> point : game.getPolygon())
+                canvas.drawCircle(point.first + paddingLeft, point.second + paddingTop, 10, paint);
 
             paint.setColor(Color.BLUE);
             Pair<Double, Double> P = game.getP();
             if (P != null)
-                canvas.drawPoint(P.first.intValue() + paddingLeft, P.second.intValue() + paddingTop, paint);
+                canvas.drawCircle(P.first.intValue() + paddingLeft, P.second.intValue() + paddingTop, 5, paint);
 
             paint.setColor(Color.BLACK);
             for (Pair<Integer, Integer> point : game.getHistory())
                 canvas.drawPoint(point.first + paddingLeft, point.second + paddingTop, paint);
+
+            canvas.drawLine(0, 0, width, 0, paint);
+            canvas.drawLine(width - 1, 0, width - 1, height, paint);
+            canvas.drawLine(width - 1, height - 1, 0, height - 1, paint);
+            canvas.drawLine(0, height - 1, 0, 0, paint);
+
+//            canvas.drawLine(paddingLeft, paddingTop, paddingLeft + gameWidth, paddingTop, paint);
+//            canvas.drawLine(paddingLeft + gameWidth, paddingTop, paddingLeft + gameWidth, paddingTop + gameHeight, paint);
+//            canvas.drawLine(paddingLeft + gameWidth, paddingTop + gameHeight, paddingLeft, paddingTop + gameHeight, paint);
+//            canvas.drawLine(paddingLeft, paddingTop + gameHeight, paddingLeft, paddingTop, paint);
         }
     }
+
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.ChaosGameActivity">
 
@@ -11,10 +12,8 @@
 
     <com.byqi.simulationgames.widget.ChaosGameView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="20sp"
-        android:paddingRight="20sp"
-        android:paddingTop="20sp"
+        android:layout_height="wrap_content"
+        app:game_height="1500"
         android:paddingBottom="20sp">
 
     </com.byqi.simulationgames.widget.ChaosGameView>
