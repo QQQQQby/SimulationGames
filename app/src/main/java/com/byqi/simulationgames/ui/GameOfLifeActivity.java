@@ -85,4 +85,10 @@ public class GameOfLifeActivity extends Activity {
         pauseButtonLayout.setVisibility(View.GONE);
         gameView.pause();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gameView.stop();
+    }
 }

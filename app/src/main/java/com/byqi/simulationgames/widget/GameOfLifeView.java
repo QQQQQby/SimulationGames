@@ -21,7 +21,7 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
     int row, col, cellWidth, cellHeight;
     int paddingLeft, paddingRight, paddingTop, paddingBottom, width, height;
     Integer speed;
-    boolean paused;
+    boolean paused, stopped;
     Paint paint;
     final GameOfLife game;
 
@@ -60,7 +60,8 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         speed = 1;
         speedLock = new Object();
         paused = true;
-        startUpdate();
+        stopped = false;
+        startIterate();
     }
 
     public void pause() {
@@ -74,6 +75,10 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
             this.paused = false;
             game.notify();
         }
+    }
+
+    public void stop() {
+        stopped = true;
     }
 
     public void setSpeed(int speed) {
@@ -137,9 +142,9 @@ public class GameOfLifeView extends View implements View.OnTouchListener {
         return new Pair<>((y - paddingTop) / cellHeight, (x - paddingLeft) / cellWidth);
     }
 
-    private void startUpdate() {
+    private void startIterate() {
         new Thread(() -> {
-            while (true) {
+            while (!stopped) {
                 int speed;
                 synchronized (speedLock) {
                     speed = 20 + 1000 / this.speed;

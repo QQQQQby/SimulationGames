@@ -11,11 +11,10 @@
         android:id="@+id/chaos_game_title"/>
 
     <com.byqi.simulationgames.widget.ChaosGameView
+        android:id="@+id/chaos_game_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:game_height="1500"
-        android:paddingBottom="20sp">
-
-    </com.byqi.simulationgames.widget.ChaosGameView>
+        android:paddingBottom="20sp" />
 
 </LinearLayout>

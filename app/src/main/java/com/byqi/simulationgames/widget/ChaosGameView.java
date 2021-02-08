@@ -20,6 +20,7 @@ public class ChaosGameView extends View {
     int width, height, gameWidth, gameHeight, paddingLeft, paddingRight, paddingTop, paddingBottom;
     final ChaosGame game;
     Paint paint;
+    boolean stopped;
 
     public ChaosGameView(Context context) {
         this(context, null, 0);
@@ -47,6 +48,7 @@ public class ChaosGameView extends View {
 
         game = new ChaosGame();
         paint = new Paint();
+        stopped = false;
 
         //Test
         game.addPointToPolygon(new Pair<>(100, 100));
@@ -54,12 +56,12 @@ public class ChaosGameView extends View {
         game.addPointToPolygon(new Pair<>(300, 1500));
         game.setP(new Pair<>(0.0, 0.0));
         new Thread(() -> {
-            while (true) {
-//                try {
-//                    Thread.sleep(0);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+            while (!stopped) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 synchronized (game) {
                     game.updateP();
                     invalidate();
@@ -69,7 +71,6 @@ public class ChaosGameView extends View {
 
 
         setOnTouchListener((view, motionEvent) -> {
-//            performClick();
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 synchronized (game) {
                     game.addPointToPolygon(new Pair<>((int) (motionEvent.getX()), (int) (motionEvent.getY())));
@@ -80,6 +81,10 @@ public class ChaosGameView extends View {
             return true;
         });
 
+    }
+
+    public void stop() {
+        stopped = true;
     }
 
     @Override

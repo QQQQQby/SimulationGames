@@ -24,8 +24,7 @@
             app:cell_height="16"
             app:cell_width="16"
             app:row="90"
-            app:col="60">
-        </com.byqi.simulationgames.widget.GameOfLifeView>
+            app:col="60" />
 
             <RelativeLayout
                 android:id="@+id/game_of_life_seek_bar_layout"
